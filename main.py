@@ -2,6 +2,8 @@
 import pygame
 from constants import * # Import all constants from the constants.py file
 from player import Player    # Import the Player class from the player.py file
+from asteroidfield import AsteroidField # Import the AsteroidField class
+from asteroid import Asteroid # Import the Asteroid class
 
 def main():
     print("Starting Asteroids!")
@@ -18,16 +20,28 @@ def main():
     # Create Pygame Group objects to manage updatable and drawable game objects.
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group() # Create a group to hold all asteroids
 
     # Set the 'containers' class variable for the Player class to include our new groups.
     # Any instances of Player created after this will automatically be added to these groups.
     Player.containers = (updatable, drawable)
+
+    # Set the 'containers' class variable for the Asteroid class to include the asteroid group
+    # as well as the updatable and drawable groups.
+    Asteroid.containers = (asteroids, updatable, drawable)
+
+    # Set the 'containers' class variable for the AsteroidField class to only the updatable group.
+    # The AsteroidField itself is not something we draw directly, but it does update.
+    AsteroidField.containers = (updatable,)
 
     # Calculate the initial position of the player in the center of the screen.
     player_x = SCREEN_WIDTH / 2
     player_y = SCREEN_HEIGHT / 2
     # Instantiate the Player object. It will now automatically be added to the 'updatable' and 'drawable' groups.
     player = Player(player_x, player_y)
+
+    # Instantiate the AsteroidField object. It will start spawning asteroids.
+    asteroid_field = AsteroidField()
 
     # Create a Pygame Clock object. This will be used to control the frame rate of the game.
     clock = pygame.time.Clock()
