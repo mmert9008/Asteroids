@@ -22,6 +22,13 @@ class CircleShape(pygame.sprite.Sprite):
         # Store the radius of the circle. This will be used for collision detection.
         self.radius = radius
 
+    # Method to check if this CircleShape collides with another CircleShape object.
+    def collides_with(self, other):
+        # Calculate the distance between the centers of the two circles using the distance_to() method.
+        distance = self.position.distance_to(other.position)
+        # If the distance is less than or equal to the sum of their radii, they are colliding.
+        return distance <= self.radius + other.radius
+
     # This method is intended to be overridden by subclasses to handle
     # the drawing of the specific game object on the screen.
     def draw(self, screen):

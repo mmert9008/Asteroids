@@ -4,6 +4,7 @@ from constants import * # Import all constants from the constants.py file
 from player import Player    # Import the Player class from the player.py file
 from asteroidfield import AsteroidField # Import the AsteroidField class
 from asteroid import Asteroid # Import the Asteroid class
+import sys # Import the sys module for exiting the program
 
 def main():
     print("Starting Asteroids!")
@@ -62,6 +63,12 @@ def main():
 
         # Update game objects. Call the 'update' method for all sprites in the 'updatable' group.
         updatable.update(dt)
+
+        # Collision detection: Check for collisions between the player and each asteroid.
+        for asteroid in asteroids:
+            if asteroid.collides_with(player):
+                print("Game over!")
+                return # Exit the main function, which will end the game loop
 
         # Drawing section. Everything drawn here will be displayed on the screen.
         # First, fill the screen with black in each frame. This clears the previous frame.
