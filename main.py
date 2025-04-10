@@ -15,17 +15,25 @@ def main():
     # The 'screen' variable will be used to draw all game elements.
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+    # Create Pygame Group objects to manage updatable and drawable game objects.
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
+    # Set the 'containers' class variable for the Player class to include our new groups.
+    # Any instances of Player created after this will automatically be added to these groups.
+    Player.containers = (updatable, drawable)
+
+    # Calculate the initial position of the player in the center of the screen.
+    player_x = SCREEN_WIDTH / 2
+    player_y = SCREEN_HEIGHT / 2
+    # Instantiate the Player object. It will now automatically be added to the 'updatable' and 'drawable' groups.
+    player = Player(player_x, player_y)
+
     # Create a Pygame Clock object. This will be used to control the frame rate of the game.
     clock = pygame.time.Clock()
     # Initialize a variable to store the delta time (time since the last frame).
     # This will be used for frame-rate independent movement and updates.
     dt = 0
-
-    # Calculate the initial position of the player in the center of the screen.
-    player_x = SCREEN_WIDTH / 2
-    player_y = SCREEN_HEIGHT / 2
-    # Instantiate the Player object, creating the player at the calculated center position.
-    player = Player(player_x, player_y)
 
     # The main game loop. This loop will continue running until the user quits the game.
     running = True
@@ -38,15 +46,15 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        # Update game objects. This should be done before drawing.
-        # Call the player's update method, passing the delta time.
-        player.update(dt)
+        # Update game objects. Call the 'update' method for all sprites in the 'updatable' group.
+        updatable.update(dt)
 
         # Drawing section. Everything drawn here will be displayed on the screen.
         # First, fill the screen with black in each frame. This clears the previous frame.
         screen.fill("black")
-        # Draw the player on the screen by calling its 'draw' method.
-        player.draw(screen)
+        # Iterate through all sprites in the 'drawable' group and call their 'draw' method.
+        for entity in drawable:
+            entity.draw(screen)
 
         # Update the full display Surface to the screen. This makes the changes visible to the user.
         pygame.display.flip()
