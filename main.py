@@ -38,6 +38,10 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
+        # Update game objects. This should be done before drawing.
+        # Call the player's update method, passing the delta time.
+        player.update(dt)
+
         # Drawing section. Everything drawn here will be displayed on the screen.
         # First, fill the screen with black in each frame. This clears the previous frame.
         screen.fill("black")

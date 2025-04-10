@@ -1,6 +1,6 @@
 import pygame
 from circleshape import CircleShape
-from constants import PLAYER_RADIUS  # Import the player's radius from constants
+from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED  # Import PLAYER_TURN_SPEED
 
 # Class representing the player's spaceship. It inherits from CircleShape
 # so that we can use its position and radius for collision detection,
@@ -13,6 +13,12 @@ class Player(CircleShape):
         # Initialize the rotation angle of the player. This will affect
         # the orientation of the triangle. It starts at 0 degrees.
         self.rotation = 0
+
+    # Method to rotate the player by a certain amount based on the time passed (dt).
+    def rotate(self, dt):
+        # Increase the rotation angle by the turn speed multiplied by the delta time.
+        # Multiplying by dt makes the rotation speed independent of the frame rate.
+        self.rotation += PLAYER_TURN_SPEED * dt
 
     # Method to calculate the vertices of the triangle representing the player.
     # It uses the player's current position, rotation, and radius to determine
@@ -43,10 +49,20 @@ class Player(CircleShape):
         # - 2: The width of the outline of the polygon (0 for filled).
         pygame.draw.polygon(screen, "white", self.triangle(), 2)
 
-    # Override the update method from the parent class. This will be used
-    # to update the player's state (e.g., movement, rotation) in each frame.
-    # For now, it's empty as we haven't implemented player movement yet.
+    # Override the update method from the parent class. This is called in each frame
+    # to update the player's state based on user input and the time passed (dt).
     def update(self, dt):
-        # We will add update logic here later.
-        pass
+        # Get the state of all keyboard keys. This returns a sequence of boolean values.
+        keys = pygame.key.get_pressed()
+
+        # Check if the 'a' key is pressed (pygame.K_a).
+        if keys[pygame.K_a]:
+            # To rotate left, we need to decrease the rotation angle.
+            # We can achieve this by passing a negative 'dt' value to the rotate method.
+            self.rotate(-dt)
+
+        # Check if the 'd' key is pressed (pygame.K_d).
+        if keys[pygame.K_d]:
+            # To rotate right, we increase the rotation angle, so we pass the regular 'dt'.
+            self.rotate(dt)
 
