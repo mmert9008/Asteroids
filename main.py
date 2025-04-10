@@ -15,6 +15,11 @@ def main():
     # Create the game window
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+    # Create a Pygame clock object
+    clock = pygame.time.Clock()
+    # Initialize delta time
+    dt = 0
+
     # Game loop
     running = True
     while running:
@@ -28,6 +33,9 @@ def main():
 
         # Update the display
         pygame.display.flip()
+
+        # Control the frame rate and calculate delta time
+        dt = clock.tick(60) / 1000.0
 
     # Quit Pygame
     pygame.quit()
