@@ -1,6 +1,6 @@
 import pygame
 from circleshape import CircleShape
-from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED
+from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN
 from shot import Shot
 
 # Class representing the player's spaceship. It inherits from CircleShape
@@ -14,6 +14,8 @@ class Player(CircleShape):
         # Initialize the rotation angle of the player. This will affect
         # the orientation of the triangle. It starts at 0 degrees.
         self.rotation = 0
+        # Initialize the shoot timer. When it's greater than 0, the player cannot shoot.
+        self.shoot_timer = 0
 
     # Method to rotate the player by a certain amount based on the time passed (dt).
     def rotate(self, dt):
@@ -33,12 +35,18 @@ class Player(CircleShape):
 
     # Method to create a new shot fired by the player.
     def shoot(self):
+        # Check if the shoot timer is greater than 0. If it is, the player is still on cooldown.
+        if self.shoot_timer > 0:
+            return  # Do not shoot
+
         # Create a new Shot object at the player's current position.
         shot = Shot(self.position.x, self.position.y)
         # Create a forward vector based on the player's current rotation.
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         # Set the velocity of the shot by multiplying the forward vector by the shooting speed.
         shot.velocity = forward * PLAYER_SHOOT_SPEED
+        # Reset the shoot timer to the cooldown duration.
+        self.shoot_timer = PLAYER_SHOOT_COOLDOWN
 
     # Method to calculate the vertices of the triangle representing the player.
     # It uses the player's current position, rotation, and radius to determine
@@ -97,4 +105,8 @@ class Player(CircleShape):
         # Check if the spacebar is pressed (pygame.K_SPACE) to shoot.
         if keys[pygame.K_SPACE]:
             self.shoot()
+
+        # Update the shoot timer by subtracting the delta time.
+        # Ensure the timer doesn't go below zero.
+        self.shoot_timer = max(0, self.shoot_timer - dt)
 

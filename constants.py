@@ -17,6 +17,7 @@ PLAYER_RADIUS = 20
 PLAYER_TURN_SPEED = 300  # Degrees per second the player can rotate
 PLAYER_SPEED = 200      # Pixels per second the player can move forward/backward
 PLAYER_SHOOT_SPEED = 500 # Pixels per second the player's shots travel
+PLAYER_SHOOT_COOLDOWN = 0.3 # Time in seconds between shots
 
 # Shot properties
 SHOT_RADIUS = 5
