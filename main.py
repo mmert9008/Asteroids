@@ -70,11 +70,18 @@ def main():
         # Update game objects. Call the 'update' method for all sprites in the 'updatable' group.
         updatable.update(dt)
 
-        # Collision detection: Check for collisions between the player and each asteroid.
+        # Collision detection:
+        # Check for collisions between the player and each asteroid.
         for asteroid in asteroids:
             if asteroid.collides_with(player):
                 print("Game over!")
                 return # Exit the main function, which will end the game loop
+
+            # Check for collisions between each asteroid and each shot.
+            for shot in shots:
+                if asteroid.collides_with(shot):
+                    asteroid.kill() # Remove the asteroid from all groups
+                    shot.kill()     # Remove the shot from all groups
 
         # Drawing section. Everything drawn here will be displayed on the screen.
         # First, fill the screen with black in each frame. This clears the previous frame.
