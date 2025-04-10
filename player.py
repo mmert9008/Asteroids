@@ -1,6 +1,7 @@
 import pygame
 from circleshape import CircleShape
-from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED  # Import PLAYER_SPEED
+from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED
+from shot import Shot
 
 # Class representing the player's spaceship. It inherits from CircleShape
 # so that we can use its position and radius for collision detection,
@@ -29,6 +30,15 @@ class Player(CircleShape):
         # Multiply the rotated vector by the player's speed and the delta time.
         # This gives us the displacement vector for this frame.
         self.position += forward * PLAYER_SPEED * dt
+
+    # Method to create a new shot fired by the player.
+    def shoot(self):
+        # Create a new Shot object at the player's current position.
+        shot = Shot(self.position.x, self.position.y)
+        # Create a forward vector based on the player's current rotation.
+        forward = pygame.Vector2(0, 1).rotate(self.rotation)
+        # Set the velocity of the shot by multiplying the forward vector by the shooting speed.
+        shot.velocity = forward * PLAYER_SHOOT_SPEED
 
     # Method to calculate the vertices of the triangle representing the player.
     # It uses the player's current position, rotation, and radius to determine
@@ -83,4 +93,8 @@ class Player(CircleShape):
             # so we multiply the movement vector by -1.
             forward = pygame.Vector2(0, 1).rotate(self.rotation)
             self.position += forward * -PLAYER_SPEED * dt
+
+        # Check if the spacebar is pressed (pygame.K_SPACE) to shoot.
+        if keys[pygame.K_SPACE]:
+            self.shoot()
 

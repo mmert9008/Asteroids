@@ -4,6 +4,7 @@ from constants import * # Import all constants from the constants.py file
 from player import Player    # Import the Player class from the player.py file
 from asteroidfield import AsteroidField # Import the AsteroidField class
 from asteroid import Asteroid # Import the Asteroid class
+from shot import Shot         # Import the Shot class
 import sys # Import the sys module for exiting the program
 
 def main():
@@ -22,6 +23,7 @@ def main():
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group() # Create a group to hold all asteroids
+    shots = pygame.sprite.Group()     # Create a group to hold all shots
 
     # Set the 'containers' class variable for the Player class to include our new groups.
     # Any instances of Player created after this will automatically be added to these groups.
@@ -30,6 +32,10 @@ def main():
     # Set the 'containers' class variable for the Asteroid class to include the asteroid group
     # as well as the updatable and drawable groups.
     Asteroid.containers = (asteroids, updatable, drawable)
+
+    # Set the 'containers' class variable for the Shot class to include the shots group
+    # as well as the updatable and drawable groups.
+    Shot.containers = (shots, updatable, drawable)
 
     # Set the 'containers' class variable for the AsteroidField class to only the updatable group.
     # The AsteroidField itself is not something we draw directly, but it does update.
@@ -90,7 +96,6 @@ def main():
     pygame.quit()
 
 # This condition checks if the script is being run directly (not imported as a module).
-# If it is, the 'main()' function is called to start the game.
 if __name__ == "__main__":
     main()
 
