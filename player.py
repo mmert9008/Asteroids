@@ -1,6 +1,6 @@
 import pygame
 from circleshape import CircleShape
-from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED  # Import PLAYER_TURN_SPEED
+from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED  # Import PLAYER_SPEED
 
 # Class representing the player's spaceship. It inherits from CircleShape
 # so that we can use its position and radius for collision detection,
@@ -19,6 +19,16 @@ class Player(CircleShape):
         # Increase the rotation angle by the turn speed multiplied by the delta time.
         # Multiplying by dt makes the rotation speed independent of the frame rate.
         self.rotation += PLAYER_TURN_SPEED * dt
+
+    # Method to move the player forward or backward based on the time passed (dt).
+    def move(self, dt):
+        # Create a unit vector pointing upwards (0, 1).
+        forward = pygame.Vector2(0, 1)
+        # Rotate this vector by the player's current rotation angle.
+        forward = forward.rotate(self.rotation)
+        # Multiply the rotated vector by the player's speed and the delta time.
+        # This gives us the displacement vector for this frame.
+        self.position += forward * PLAYER_SPEED * dt
 
     # Method to calculate the vertices of the triangle representing the player.
     # It uses the player's current position, rotation, and radius to determine
@@ -55,14 +65,22 @@ class Player(CircleShape):
         # Get the state of all keyboard keys. This returns a sequence of boolean values.
         keys = pygame.key.get_pressed()
 
-        # Check if the 'a' key is pressed (pygame.K_a).
+        # Check if the 'a' key is pressed (pygame.K_a) for left rotation.
         if keys[pygame.K_a]:
-            # To rotate left, we need to decrease the rotation angle.
-            # We can achieve this by passing a negative 'dt' value to the rotate method.
             self.rotate(-dt)
 
-        # Check if the 'd' key is pressed (pygame.K_d).
+        # Check if the 'd' key is pressed (pygame.K_d) for right rotation.
         if keys[pygame.K_d]:
-            # To rotate right, we increase the rotation angle, so we pass the regular 'dt'.
             self.rotate(dt)
+
+        # Check if the 'w' key is pressed (pygame.K_w) for forward movement.
+        if keys[pygame.K_w]:
+            self.move(dt)
+
+        # Check if the 's' key is pressed (pygame.K_s) for backward movement.
+        if keys[pygame.K_s]:
+            # To move backward, we move in the opposite direction of 'forward',
+            # so we multiply the movement vector by -1.
+            forward = pygame.Vector2(0, 1).rotate(self.rotation)
+            self.position += forward * -PLAYER_SPEED * dt
 

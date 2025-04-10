@@ -15,4 +15,5 @@ ASTEROID_MAX_RADIUS = ASTEROID_MIN_RADIUS * ASTEROID_KINDS # Maximum possible ra
 # Player properties
 PLAYER_RADIUS = 20
 PLAYER_TURN_SPEED = 300  # Degrees per second the player can rotate
+PLAYER_SPEED = 200      # Pixels per second the player can move forward/backward
 
