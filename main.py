@@ -80,7 +80,7 @@ def main():
             # Check for collisions between each asteroid and each shot.
             for shot in shots:
                 if asteroid.collides_with(shot):
-                    asteroid.kill() # Remove the asteroid from all groups
+                    asteroid.split() # Call the split method instead of kill
                     shot.kill()     # Remove the shot from all groups
 
         # Drawing section. Everything drawn here will be displayed on the screen.
